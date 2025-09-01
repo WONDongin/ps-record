@@ -1,7 +1,7 @@
 ### ⭐ 알고리즘 문제풀이 저장소
 
-> 프로그래머스 / 백준 문제 풀이를 기록하는 저장소입니다. :D  
-> [백준(Solved.ac) 프로필](https://solved.ac/profile/bangsa100) > <br/>
+> 프로그래머스 / 백준 문제 풀이를 기록하는 저장소입니다. :D <br/> > [백준(Solved.ac) 프로필](https://solved.ac/profile/bangsa100) >
+> <br/>
 
 ### ✅ 목표
 
