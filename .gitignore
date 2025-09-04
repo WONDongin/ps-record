@@ -4,6 +4,3 @@
 # Build output directory
 out/
 
-# OS-specific files (선택)
-.DS_Store
-Thumbs.db
