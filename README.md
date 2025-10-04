@@ -29,14 +29,14 @@
 ```bash
 📁 programmers/
   └── level0/
-      └── no01.java
+      └── No1.java
   └── level1/
-      └── no01.java
+      └── No1.java
 📁 baekjoon/
   └── no_1000/
       └── No1000.java
 📁 images/
-   └── preview.png
+   └── profile.png
 📄 .gitignore
 📄 README.md
 ```
@@ -46,7 +46,7 @@
 ### ✍️ 파일명 및 코드 작성 규칙
 
 - 파일명은 문제 제목 또는 번호로 구성
-  -- 예: PCCE_01/카운트업출력.java, 1000.java
+  -- 예: No1000.java
 - 각 파일 상단에는 문제 링크 및 간단한 설명 주석을 포함
 - 가급적 함수형으로 풀이하며, 주석으로 접근 방법 설명을 작성
   <br/>
