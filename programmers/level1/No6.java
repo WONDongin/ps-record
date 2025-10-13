@@ -7,12 +7,6 @@ import java.util.Arrays;
 /*
 문제 : 자연수 뒤집기 (입력 → 배열 변환)
 
-웹/서버 환경 (Spring, REST API)
-- 사용자 입력은 HTTP 요청(request body or parameter)
-- 사용자로부터 입력받은 자연수를 역순(int 배열) 으로 변환하는 기능 구현.
-예: 입력 12345 → 출력 [5, 4, 3, 2, 1]
-
-
 주요 메서드 및 역할
 1. main(String[] args)
 - 콘솔 입력(BufferedReader)을 통해 사용자 입력 수신
@@ -40,12 +34,14 @@ import java.util.Arrays;
 - 확장성: 메서드 분리로 로직 재사용 가능
 - 표준 자바 스타일: try-with-resources, 명확한 예외 처리
 
-
 웹/서버 환경에서도 동일 로직을 재활용할 수 있도록
 - solution()은 순수 함수 형태로 설계됨.
-예: Spring REST API Controller에서 @GetMapping("/reverse")로 변환 가능.
 
 웹/서버 환경 (Spring, REST API)
+- 사용자 입력은 HTTP 요청(request body or parameter)
+- 사용자로부터 입력받은 자연수를 역순(int 배열) 으로 변환하는 기능 구현.
+예: 입력 12345 → 출력 [5, 4, 3, 2, 1]
+
 @RestController
 @RequestMapping("/api")
 public class NumberController {
