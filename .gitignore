@@ -5,3 +5,39 @@
 # Build output directory
 out/
 
+# ===============================
+# 🔹 C Language build files
+# ===============================
+*.exe
+*.out
+*.obj
+*.o
+
+# ===============================
+# 🔹 Java build files
+# ===============================
+*.class
+*.jar
+*.war
+*.ear
+target/
+build/
+.gradle/
+bin/
+
+# ===============================
+# 🔹 Python build/cache files
+# ===============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pytest_cache/
+*.ipynb_checkpoints/
+
+# ===============================
+# 🔹 OS / Editor temporary files
+# ===============================
+.DS_Store
+Thumbs.db
+*.log
