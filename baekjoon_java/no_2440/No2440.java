@@ -1,4 +1,7 @@
 package no_2440;
+
+import java.util.Scanner;
+
 /*
 문제-2440 (브론즈4): 별찍기-3
 
