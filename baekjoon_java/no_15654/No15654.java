@@ -14,6 +14,7 @@ import java.util.Arrays;
 `BufferedReader.readLine()`
 - 입력을 빠르게 받기 위한 표준 메서드
 - 공백 기준으로 split하여 N, M, 배열 값을 파싱함
+
 `Arrays.sort(arr)`
 - 입력받은 자연수 배열을 정렬하여 사전 순으로 출력되도록 보장함
 
