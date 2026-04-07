@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 /*
 문제-1418: K-세준수
-<<<<<<< Updated upstream
-=======
 - 1부터 N까지의 수 중에서
 - 가장 큰 소인수가 K 이하인 수(K-세준수)의 개수를 구하는 문제
->>>>>>> Stashed changes
 
 주요 메서드
 - 에라토스테네스 변형을 이용한 spf(가장 작은 소인수) 계산
