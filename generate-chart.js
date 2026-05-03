@@ -18,7 +18,7 @@ const configuration = {
     data: {
         labels: Array.from({ length: values.length }, (_, i) => i + 1),
         datasets: [{
-            label: '문제 수',
+            label: '프로그래머스 알고리즘 풀이 추이',
             data: values,
             borderColor: '#58a6ff',
             backgroundColor: 'rgba(88,166,255,0.2)',
@@ -31,14 +31,6 @@ const configuration = {
     options: {
         responsive: false,
         plugins: {
-            title: {
-                display: true,
-                text: '5월 문제 풀이 기록',
-                color: '#ffffff',
-                font: {
-                    size: 18
-                }
-            },
             legend: {
                 labels: { color: '#ffffff' }
             }
