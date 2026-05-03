@@ -1,0 +1,24 @@
+{
+  "name": "ps-record",
+  "version": "1.0.0",
+  "description": "> 백준 서비스 종료 : 26/04/28\r > <br/>\r > 프로그래머스 / 백준 문제 풀이를 기록하는 저장소입니다. :D <br/> [백준(Solved.ac) 프로필](https://solved.ac/profile/bangsa100)\r > <br/>",
+  "main": "generate-chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WONDongin/ps-record.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WONDongin/ps-record/issues"
+  },
+  "homepage": "https://github.com/WONDongin/ps-record#readme",
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "chartjs-node-canvas": "^5.0.0"
+  }
+}
