@@ -1,83 +1,53 @@
 package level1;
-import java.util.*;
 /*
-문제: 실패율
+문제: 둘만의 암호
 
 로직
-
-- 스테이지별 사용자 수를 count 배열에 저장
-- 각 스테이지의 실패율 계산
-- 실패율 기준 내림차순 정렬 후 결과 반환
+- 문자열의 각 문자를 순회하며 index만큼 이동
+- skip에 포함된 문자는 건너뛰며 이동 횟수 계산
+- z를 넘어가면 다시 a부터 순환
 
 핵심 구현
-
-- 실패율 계산
-  ex) rate = (double) count[i] / players;
-- 현재 스테이지 실패 인원 제외
-  ex) players -= count[i];
+- skip 문자인지 확인
+  ex) skip.indexOf(ch) == -1
+- 이동 횟수 충족 시까지 반복
+  ex) while (count < index)
 
 포인트
-
-- 도달한 사용자가 없는 경우 실패율 0 처리
-- 실패율이 같으면 스테이지 번호 오름차순 정렬
+- z 다음 문자는 a로 변경해야 함
+- skip 문자는 이동 횟수에 포함하지 않음
+- 모든 문자를 변환한 뒤 문자열로 조합
 
 회고
-
-- 카운팅 배열을 활용한 집계 방식에 익숙해질 수 있었다.
-- 정렬 조건이 여러 개인 경우 Comparator 활용이 중요하다는 것을 다시 확인했다.
+- 문자 연산(char++)과 아스키코드 활용에 익숙해질 수 있었다.
+- 특정 문자를 제외하며 순환하는 구현 문제를 연습할 수 있었다.
 */
 public class No61 {
-    class Solution {
+    public static void main(String[] args) {
+        String s = "aukks";
+        String skip = "wbqd";
+        int index = 5;
+        String answer = "";
 
-        static class Stage {
-            int number;
-            double rate;
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            int count = 0;
 
-            Stage(int number, double rate) {
-                this.number = number;
-                this.rate = rate;
-            }
-        }
+            while (count < index){
+                ch++;
 
-        public int[] solution(int N, int[] stages) {
-
-            int[] count = new int[N + 2];
-
-            for (int stage : stages) {
-                count[stage]++;
-            }
-
-            List<Stage> list = new ArrayList<>();
-
-            int players = stages.length;
-
-            for (int i = 1; i <= N; i++) {
-
-                double rate = 0;
-
-                if (players != 0) {
-                    rate = (double) count[i] / players;
+                if(ch > 'z'){
+                    ch = 'a';
                 }
 
-                list.add(new Stage(i, rate));
-
-                players -= count[i];
-            }
-
-            list.sort((a, b) -> {
-                if (a.rate == b.rate) {
-                    return a.number - b.number;
+                if(skip.indexOf(ch) == -1){
+                    count++;
                 }
-                return Double.compare(b.rate, a.rate);
-            });
-
-            int[] answer = new int[N];
-
-            for (int i = 0; i < N; i++) {
-                answer[i] = list.get(i).number;
             }
 
-            return answer;
+            answer += ch;
         }
+
+        System.out.println(answer);
     }
 }
