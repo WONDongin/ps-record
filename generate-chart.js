@@ -18,7 +18,7 @@ const configuration = {
     data: {
         labels: Array.from({ length: values.length }, (_, i) => i + 1),
         datasets: [{
-            label: '프로그래머스 알고리즘 풀이 추이',
+            label: '7월 프로그래머스 알고리즘 풀이 추이',
             data: values,
             borderColor: '#58a6ff',
             backgroundColor: 'rgba(88,166,255,0.2)',
