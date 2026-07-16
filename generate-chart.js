@@ -1,48 +1,114 @@
-const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-const fs = require('fs');
+const { ChartJSNodeCanvas } = require("chartjs-node-canvas");
+const fs = require("fs");
 
-const width = 800;
-const height = 400;
+const width = 1100;
+const height = 500;
 
-const raw = fs.readFileSync('data.json');
-const { values } = JSON.parse(raw);
+const raw = fs.readFileSync("data.json");
+const { labels, monthly } = JSON.parse(raw);
+
+// 누적 계산
+const cumulative = [];
+monthly.reduce((sum, value) => {
+    sum += value;
+    cumulative.push(sum);
+    return sum;
+}, 0);
 
 const chartJSNodeCanvas = new ChartJSNodeCanvas({
     width,
     height,
-    backgroundColour: '#0d1117'
+    backgroundColour: "#0d1117"
 });
 
 const configuration = {
-    type: 'line',
     data: {
-        labels: Array.from({ length: values.length }, (_, i) => i + 1),
-        datasets: [{
-            label: '7월 프로그래머스 알고리즘 풀이 추이',
-            data: values,
-            borderColor: '#58a6ff',
-            backgroundColor: 'rgba(88,166,255,0.2)',
-            tension: 0.4,                // 더 부드럽게
-            borderWidth: 2,              // 선 두께
-            pointRadius: 4,              // 점 크기
-            pointBackgroundColor: '#58a6ff'
-        }]
+        labels,
+        datasets: [
+            {
+                type: "bar",
+                label: "월별 풀이",
+                data: monthly,
+                backgroundColor: "rgba(88,166,255,0.65)",
+                borderColor: "#58a6ff",
+                borderWidth: 1,
+                borderRadius: 6,
+                yAxisID: "y"
+            },
+            {
+                type: "line",
+                label: "누적 풀이",
+                data: cumulative,
+                borderColor: "#2ea043",
+                backgroundColor: "#2ea043",
+                borderWidth: 3,
+                tension: 0.35,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                pointBackgroundColor: "#2ea043",
+                fill: false,
+                yAxisID: "y1"
+            }
+        ]
     },
     options: {
         responsive: false,
         plugins: {
+            title: {
+                display: true,
+                text: "Programmers Algorithm Progress",
+                color: "#ffffff",
+                font: {
+                    size: 22
+                }
+            },
             legend: {
-                labels: { color: '#ffffff' }
+                labels: {
+                    color: "#ffffff",
+                    font: {
+                        size: 13
+                    }
+                }
             }
         },
         scales: {
             x: {
-                ticks: { color: '#ffffff' }
+                ticks: {
+                    color: "#ffffff"
+                },
+                grid: {
+                    color: "#30363d"
+                }
             },
             y: {
-                min: 0,
-                max: 10,
-                ticks: { color: '#ffffff' }
+                position: "left",
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: "Monthly",
+                    color: "#58a6ff"
+                },
+                ticks: {
+                    color: "#58a6ff"
+                },
+                grid: {
+                    color: "#30363d"
+                }
+            },
+            y1: {
+                position: "right",
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: "Cumulative",
+                    color: "#2ea043"
+                },
+                ticks: {
+                    color: "#2ea043"
+                },
+                grid: {
+                    drawOnChartArea: false
+                }
             }
         }
     }
@@ -50,6 +116,6 @@ const configuration = {
 
 (async () => {
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-    fs.writeFileSync('graph.png', image);
-    console.log('✅ graph.png 생성 완료');
+    fs.writeFileSync("graph.png", image);
+    console.log("✅ graph.png 생성 완료");
 })();
