@@ -83,13 +83,15 @@ const configuration = {
             y: {
                 position: "left",
                 beginAtZero: true,
+                max: 80,
                 title: {
                     display: true,
                     text: "Monthly",
                     color: "#58a6ff"
                 },
                 ticks: {
-                    color: "#58a6ff"
+                    color: "#58a6ff",
+                    stepSize: 10
                 },
                 grid: {
                     color: "#30363d"
@@ -98,13 +100,15 @@ const configuration = {
             y1: {
                 position: "right",
                 beginAtZero: true,
+                max: 800,
                 title: {
                     display: true,
                     text: "Cumulative",
                     color: "#2ea043"
                 },
                 ticks: {
-                    color: "#2ea043"
+                    color: "#2ea043",
+                    stepSize: 100
                 },
                 grid: {
                     drawOnChartArea: false
