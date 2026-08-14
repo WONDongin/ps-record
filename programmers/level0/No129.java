@@ -23,7 +23,7 @@ import java.util.Arrays;
 - split()의 limit 값을 -1로 지정하면 마지막 빈 문자열까지
   유지할 수 있다는 점을 학습했다.
 */
-public class N0129 {
+public class No129 {
     class Solution {
         public int[] solution(String myString) {
             return Arrays.stream(myString.split("x", -1))
