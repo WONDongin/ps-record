@@ -21,7 +21,6 @@ import java.util.Arrays;
 - 두 문자열을 정렬한 후 비교하여 문자의 종류와 개수가 같은지 간단하게 확인했다.
 */
 public class No193 {
-
         public int solution(String before, String after) {
             char[] beforeArray = before.toCharArray();
             char[] afterArray = after.toCharArray();
