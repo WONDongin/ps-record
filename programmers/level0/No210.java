@@ -1,33 +1,49 @@
 package level0;
 /*
-문제: 정사각형으로 만들기
+문제: 배열 원소의 길이
 
 로직
-- 행의 수와 열의 수 중 큰 값을 구한다.
-- 해당 크기의 정사각형 배열을 만든다.
-- 기존 배열의 값을 같은 위치에 복사한다.
+- 배열의 모든 원소에 조건에 맞는 연산을 반복하고,
+한 번의 반복에서 아무 원소도 바뀌지 않으면 현재 반복 횟수를 반환한다.
 
 핵심 구현
-- int size = Math.max(arr.length, arr[0].length);
-- System.arraycopy로 각 행의 기존 값을 복사한다.
+- 각 원소의 변경 전후 값을 비교해 changed를 기록한다.
+changed가 false이면 arr(count)와 arr(count + 1)이 같다.
 
 포인트
-- 새로 만든 int 배열의 나머지 칸은 기본값인 0으로 채워진다.
+- 배열이 처음부터 변하지 않는다면 정답은 0이다.
 
 회고
-- 행과 열을 따로 추가하는 대신 필요한 크기의 배열을 만들고 기존 값을 옮겼다.
+- 배열 전체를 복사해 비교하지 않아도 변경 여부만 확인하면 종료 시점을 알 수 있다.
 */
 public class No210 {
     class Solution {
-        public int[][] solution(int[][] arr) {
-            int size = Math.max(arr.length, arr[0].length);
-            int[][] answer = new int[size][size];
+        public int solution(int[] arr) {
+            int count = 0;
 
-            for (int i = 0; i < arr.length; i++) {
-                System.arraycopy(arr[i], 0, answer[i], 0, arr[i].length);
+            while (true) {
+                boolean changed = false;
+
+                for (int i = 0; i < arr.length; i++) {
+                    int before = arr[i];
+
+                    if (arr[i] >= 50 && arr[i] % 2 == 0) {
+                        arr[i] /= 2;
+                    } else if (arr[i] < 50 && arr[i] % 2 == 1) {
+                        arr[i] = arr[i] * 2 + 1;
+                    }
+
+                    if (arr[i] != before) {
+                        changed = true;
+                    }
+                }
+
+                if (!changed) {
+                    return count;
+                }
+
+                count++;
             }
-
-            return answer;
         }
     }
 }
