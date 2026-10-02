@@ -1,73 +1,137 @@
 package level0;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayDeque;
+import java.util.Arrays;
 /*
-문제: N으로 표현
+문제: RPG와 쿼리
 
 로직
-- N을 1번부터 8번까지 사용해서 만들 수 있는 숫자를 사용 횟수별로 저장한다.
-- N을 이어 붙인 숫자(N, NN, NNN 등)를 추가한다.
-- 사용 횟수를 두 부분으로 나누고, 각 부분에서 만든 숫자를 사칙연산으로 조합한다.
-- number가 처음 등장한 사용 횟수를 반환한다.
+- 도로 이동과 순간 이동만으로 z² 미만의 금액을 만드는 최소 턴 수를 구한다.
+- (도시, 금액)을 상태로 두고 0-1 BFS를 수행한다.
+- 같은 나머지의 금액에 대해 보정된 턴 수의 최솟값을 저장한다.
+- 각 쿼리는 부족한 금액을 z원씩 얻는 턴을 더해 계산한다.
 
 핵심 구현
-- dp[count]에 N을 count번 사용해서 만들 수 있는 숫자를 저장한다.
-- leftCount + rightCount = count가 되도록 모든 분할을 확인한다.
-- 두 집합의 숫자에 덧셈, 뺄셈, 곱셈, 나눗셈을 적용한다.
-- 나눗셈은 0으로 나누는 경우를 제외한다.
+- 순간 이동은 금액별 허브를 사용해 도시 간 간선을 압축한다.
+- 허브로 들어가는 비용은 0턴, 허브에서 도시로 나오는 비용은 1턴이다.
+- prefixMin[money]에 같은 나머지의 이전 금액까지 고려한 최솟값을 저장한다.
+- 쿼리 결과는 target / z + prefixMin[candidate]로 계산한다.
 
 포인트
-- 같은 숫자가 여러 수식으로 만들어질 수 있으므로 Set으로 중복을 제거한다.
-- 뺄셈과 나눗셈은 순서에 따라 결과가 달라지므로 분할을 모두 확인한다.
-- 사용 횟수가 작은 순서대로 탐색하므로 number를 처음 찾은 횟수가 최솟값이다.
+- 쿼리 금액이 최대 10^18이므로 결과와 쿼리에는 long을 사용한다.
+- 도시에서 제자리에 머무르는 행동은 마지막에 몰아서 수행할 수 있다.
+- 0원 쿼리는 시작 상태에서 바로 달성하므로 결과가 0이다.
+- 만들 수 없는 금액은 -1을 반환한다.
 
 회고
-- 수식을 직접 구성하려고 하면 괄호와 연산 순서를 관리하기 복잡하다.
-- 사용한 N의 개수를 기준으로 가능한 결과를 모으면 작은 문제의 결과를 재사용할 수 있다.
+- 금액 전체를 탐색하는 대신 z로 나눈 나머지에 주목해야 했다.
+- 순간 이동을 허브 상태로 표현해 도시 간 모든 간선을 만들지 않고 처리했다.
+- 작은 금액의 최단 경로를 전처리해 큰 쿼리를 O(1)에 계산할 수 있었다.
 */
 public class No222 {
     class Solution {
-        public int solution(int N, int number) {
-            if (N == number) {
-                return 1;
+        private static final int INF = 1_000_000_000;
+
+        public long[] solution(int n, int z, int[][] roads, long[] queries) {
+            int limit = z * z;
+            int totalStates = (n + 1) * limit;
+
+            int[] head = new int[n];
+            Arrays.fill(head, -1);
+
+            int[] to = new int[roads.length];
+            int[] weight = new int[roads.length];
+            int[] next = new int[roads.length];
+
+            for (int i = 0; i < roads.length; i++) {
+                int u = roads[i][0];
+                to[i] = roads[i][1];
+                weight[i] = roads[i][2];
+                next[i] = head[u];
+                head[u] = i;
             }
 
-            @SuppressWarnings("unchecked")
-            Set<Integer>[] dp = new HashSet[9];
+            int[] dist = new int[totalStates];
+            Arrays.fill(dist, INF);
 
-            for (int count = 1; count <= 8; count++) {
-                dp[count] = new HashSet<>();
+            ArrayDeque<Integer> deque = new ArrayDeque<>();
+            dist[0] = 0; // (0번 도시, 0원)
+            deque.add(0);
 
-                // N, NN, NNN처럼 숫자를 이어 붙인 경우
-                int repeated = 0;
-                for (int i = 0; i < count; i++) {
-                    repeated = repeated * 10 + N;
-                }
-                dp[count].add(repeated);
+            int[] minTurns = new int[limit];
+            Arrays.fill(minTurns, INF);
 
-                // N을 총 count번 사용하도록 두 식을 나눈다.
-                for (int leftCount = 1; leftCount < count; leftCount++) {
-                    int rightCount = count - leftCount;
+            while (!deque.isEmpty()) {
+                int state = deque.pollFirst();
+                int currentDist = dist[state];
+                int city = state / limit;
+                int money = state % limit;
 
-                    for (int left : dp[leftCount]) {
-                        for (int right : dp[rightCount]) {
-                            dp[count].add(left + right);
-                            dp[count].add(left - right);
-                            dp[count].add(left * right);
+                if (city == n) {
+                    // 허브 -> 원하는 도시: 순간 이동 1턴
+                    for (int nextCity = 0; nextCity < n; nextCity++) {
+                        int nextState = nextCity * limit + money;
 
-                            if (right != 0) {
-                                dp[count].add(left / right);
-                            }
+                        if (dist[nextState] > currentDist + 1) {
+                            dist[nextState] = currentDist + 1;
+                            deque.addLast(nextState);
                         }
                     }
+                    continue;
                 }
 
-                if (dp[count].contains(number)) {
-                    return count;
+                minTurns[money] = Math.min(minTurns[money], currentDist);
+
+                // 현재 도시 -> 같은 금액의 허브: 0턴
+                int hubState = n * limit + money;
+                if (dist[hubState] > currentDist) {
+                    dist[hubState] = currentDist;
+                    deque.addFirst(hubState);
+                }
+
+                // 도로 이동: 1턴
+                for (int edge = head[city]; edge != -1; edge = next[edge]) {
+                    int nextMoney = money + weight[edge];
+                    if (nextMoney >= limit) {
+                        continue;
+                    }
+
+                    int nextState = to[edge] * limit + nextMoney;
+                    if (dist[nextState] > currentDist + 1) {
+                        dist[nextState] = currentDist + 1;
+                        deque.addLast(nextState);
+                    }
                 }
             }
 
-            return -1;
+            // 같은 나머지의 금액들을 대상으로 구간 최솟값 계산
+            int[] prefixMin = new int[limit];
+            for (int money = 0; money < limit; money++) {
+                int value = minTurns[money] == INF
+                        ? INF
+                        : minTurns[money] - money / z;
+
+                if (money >= z) {
+                    value = Math.min(value, prefixMin[money - z]);
+                }
+
+                prefixMin[money] = value;
+            }
+
+            long[] answer = new long[queries.length];
+
+            for (int i = 0; i < queries.length; i++) {
+                long target = queries[i];
+
+                int candidate = target < limit
+                        ? (int) target
+                        : limit - z + (int) (target % z);
+
+                answer[i] = prefixMin[candidate] == INF
+                        ? -1
+                        : target / z + prefixMin[candidate];
+            }
+
+            return answer;
         }
     }
 }
